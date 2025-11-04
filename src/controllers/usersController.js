@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const usersSchema = require('../models/usersSchema');
-const UserRolesSchema = require("../models/userRolesSchema");
 const userRolesSchema = require('../models/userRolesSchema');
 const jwtSecretToken = process.env.JWT_SECRET_ACCESS_TOKEN;
 const jwtTokenExpiresDays = process.env.JWT_EXPIRES_DAYS;
@@ -42,8 +41,12 @@ exports.register = async function(req, res) {
             }));
     };
 
-exports.sign_in = async function(req, res) {   
-    await usersSchema.findOne({ email: req.body.email }).then(function(user) {
+exports.sign_in = async function(req, res) {  
+    if(!req.body.userRoleType){
+        return res.status(401).json({ message: 'Userrole type is missing' });
+    } 
+    const signin_userroletype = await userRolesSchema.findOne({ roleType: req.body.userRoleType });
+    await usersSchema.findOne({ email: req.body.email, userrole: signin_userroletype }).then(function(user) {
         if (!user || !user.comparePassword(req.body.password)) {
             return res.status(401).json({ message: 'Authentication failed. Invalid user or password.' });
         }
@@ -62,12 +65,21 @@ exports.sign_in = async function(req, res) {
     }
 };
 
-    exports.profile = function(req, res, next) {
+exports.profile = async function(req, res, next) {
+        
     if (req.user) {
-        res.send(req.user);
-        next();
+        await usersSchema.findOne({_id: req.user._id}).then(function(user) {
+            res.send(user);
+        });
     }
     else {
         return res.status(401).json({ message: 'Invalid token' });
     }
+};
+
+exports.usersList = async function(req, res, next) {
+        
+        await usersSchema.find().then(function(user) {
+            res.send(user);
+        });
 };

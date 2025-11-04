@@ -1,6 +1,5 @@
 // usersschema.js
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
 const { Schema } = mongoose;
 const UserRolesSchema = new Schema({
     roleType: {

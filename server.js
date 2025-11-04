@@ -2,6 +2,7 @@
 require('dotenv').config();
 require('./src/db');
 const express = require('express');
+const cors = require('cors');
 const app = express();
 const port = process.env.PORT || 3000;
 const bodyParser = require('body-parser');
@@ -15,7 +16,7 @@ app.use(function(req, res, next) {
     res.setHeader('Access-Control-Allow-Credentials', true);
     next();
 });
-
+app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
@@ -31,7 +32,7 @@ app.use(function(req, res, next) {
             next();
         }
     }); 
-    app.use('/auth',usersRoute);
+    app.use('/',usersRoute);
     app.use(function(req, res) {
         res.status(404).send({ url: req.originalUrl + ' not found' })
         res.end();
