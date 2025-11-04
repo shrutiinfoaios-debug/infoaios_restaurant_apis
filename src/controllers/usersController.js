@@ -66,9 +66,16 @@ exports.sign_in = async function(req, res) {
 };
 
 exports.profile = async function(req, res, next) {
-        
-    if (req.user) {
-        await usersSchema.findOne({_id: req.user._id}).then(function(user) {
+    var user_profile_id;
+    if(req.body.user_id){
+        user_profile_id = req.body.user_id;
+    }    
+    else if (req.user) {
+        user_profile_id = req.user._id
+    }
+    if(user_profile_id)
+    {
+        await usersSchema.findOne({_id: user_profile_id}).then(function(user) {
             res.send(user);
         });
     }
