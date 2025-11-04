@@ -56,8 +56,7 @@ exports.sign_in = async function(req, res) {
         });
     };
 
-    exports.loginRequired = function(req, res, next) {
-
+exports.loginRequired = function(req, res, next) {
     if (req.user) {
         next();
     } else {
@@ -89,4 +88,16 @@ exports.usersList = async function(req, res, next) {
         await usersSchema.find().then(function(user) {
             res.send(user);
         });
+};
+
+exports.changePassword = async function(req, res, next) {
+    await usersSchema.findOne({ _id: req.user._id}).then(async function(user) {
+        if (!user || !user.comparePassword(req.body.old_password)) {
+            return res.status(401).json({ message: 'Authentication failed. Invalid password.' });
+        }
+
+        await usersSchema.updateOne(req.user_id, { hashedPassword: hashPassword(req.body.new_password)});
+
+        return res.status(200).json({ message: 'Password changed successfully.'});
+    });
 };

@@ -4,7 +4,8 @@ var usersHandlers = require('../controllers/usersController.js');
 const callLogController = require('../controllers/callLogsController.js');
 
 router.post('/auth/user_profile', usersHandlers.loginRequired, usersHandlers.profile);
-router.post('/auth/users_list', usersHandlers.loginRequired, usersHandlers.usersList);
+router.get('/auth/users_list', usersHandlers.loginRequired, usersHandlers.usersList);
+router.put('/auth/change_password', usersHandlers.loginRequired, usersHandlers.changePassword);
 router.post('/auth/register',usersHandlers.register);
 router.post('/auth/sign_in',usersHandlers.sign_in);
 
