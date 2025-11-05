@@ -91,13 +91,21 @@ exports.usersList = async function(req, res, next) {
 };
 
 exports.changePassword = async function(req, res, next) {
+    if(!req.body.old_password || !req.body.new_password){
+        return res.status(400).json({ message: 'parameter missing' });
+    }
+
     await usersSchema.findOne({ _id: req.user._id}).then(async function(user) {
         if (!user || !user.comparePassword(req.body.old_password)) {
             return res.status(401).json({ message: 'Authentication failed. Invalid password.' });
         }
+        try{
+            await usersSchema.updateOne({_id: req.user._id} , {$set : { passwordHash: await hashPassword(req.body.new_password)}});
+            return res.status(200).json({message: 'Password changed successfully.'});
+        }catch(e){
+            return res.status(400).json({ message: e.message});
+        }
 
-        await usersSchema.updateOne(req.user_id, { hashedPassword: hashPassword(req.body.new_password)});
-
-        return res.status(200).json({ message: 'Password changed successfully.'});
+        
     });
 };
