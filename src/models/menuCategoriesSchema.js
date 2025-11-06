@@ -2,25 +2,13 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const { Schema } = mongoose;
 
-const callLogsSchema = new Schema({
+const menuCategoriesSchema = new Schema({
       userRestaurantId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'users',
         required: true
       },
-      callerNumber: {
-        type: String,
-        required: true
-      },
-      receiverNumber: {
-        type: String,
-        required: true
-      },
-      duration: {
-        type: String,
-        required: true
-      },
-      callType: {
+      categoryName: {
         type: String,
         required: true
       },
@@ -31,7 +19,12 @@ const callLogsSchema = new Schema({
       createdAt: {
          type: Date,
          default:Date.now
-      }
+      },
+      createdBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'users', 
+        default: null
+          }
 },{ versionKey: false});
 
-module.exports = mongoose.model('calllogs', callLogsSchema);
+module.exports = mongoose.model('menucategories', menuCategoriesSchema);

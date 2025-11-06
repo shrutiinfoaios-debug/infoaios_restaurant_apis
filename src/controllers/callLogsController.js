@@ -1,5 +1,4 @@
 const callLogsSchema = require('../models/callLogsSchema');
-const userRolesSchema = require('../models/userRolesSchema');
 
 exports.create_calllog = async function(req, res) {
     var newCallLog = new callLogsSchema(req.body);
@@ -11,8 +10,10 @@ exports.create_calllog = async function(req, res) {
 };
 
 exports.calllog_list = async function(req, res, next) {
-        
-        await callLogsSchema.find().then(function(calllog) {
+        if(req.query.restaurantId){
+            var filter = { userRestaurantId: req.query.restaurantId}
+        }
+        await callLogsSchema.find(filter).then(function(calllog) {
             res.send(calllog);
         });
 };
