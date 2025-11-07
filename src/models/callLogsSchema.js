@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
 const { Schema } = mongoose;
 
 const callLogsSchema = new Schema({
@@ -31,6 +30,11 @@ const callLogsSchema = new Schema({
       createdAt: {
          type: Date,
          default:Date.now
+      },
+      createdBy:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"users",
+        default: null
       }
 },{ versionKey: false});
 

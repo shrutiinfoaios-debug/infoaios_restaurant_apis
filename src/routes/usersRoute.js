@@ -3,6 +3,7 @@ const router = express.Router();
 var usersHandlers = require('../controllers/usersController.js');
 const callLogController = require('../controllers/callLogsController.js');
 const menuCategoryController = require('../controllers/menuCategoriesController.js');
+const menuItemsController = require('../controllers/menuItemsController.js');
 
 router.post('/auth/user_profile', usersHandlers.loginRequired, usersHandlers.profile);
 router.get('/auth/users_list', usersHandlers.loginRequired, usersHandlers.usersList);
@@ -14,6 +15,9 @@ router.post('/calllog/create_calllog', usersHandlers.loginRequired, callLogContr
 router.get('/calllog/calllog_list', usersHandlers.loginRequired, callLogController.calllog_list);
 
 router.post('/menucategory/create_menucategory', usersHandlers.loginRequired, menuCategoryController.create_menucategory);
-router.get('/menucategory/menucategory_list', usersHandlers.loginRequired, menuCategoryController.menucategory_list);
+router.post('/menucategory/menucategory_list', usersHandlers.loginRequired, menuCategoryController.menucategory_list);
+
+router.post('/menuitem/create_menuitem', usersHandlers.loginRequired, menuItemsController.create_menuitem);
+router.post('/menuitem/menuitem_list', usersHandlers.loginRequired, menuItemsController.menuitem_list);
 
 module.exports = router;

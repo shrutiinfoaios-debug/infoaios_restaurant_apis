@@ -1,6 +1,8 @@
 const callLogsSchema = require('../models/callLogsSchema');
 
 exports.create_calllog = async function(req, res) {
+    req.body.createdBy = req.user._id;
+    console.log(req.body)
     var newCallLog = new callLogsSchema(req.body);
     newCallLog.save().then(function(callLog) {
             return res.json(callLog);
