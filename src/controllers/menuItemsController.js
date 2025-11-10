@@ -1,5 +1,7 @@
 const menuCategoriesSchema = require('../models/menuCategoriesSchema');
 const menuItemsSchema = require('../models/menuItemsSchema');
+const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId;
 
 exports.create_menuitem = async function(req, res) {
     req.body.createdBy = req.user._id;
@@ -12,17 +14,31 @@ exports.create_menuitem = async function(req, res) {
 };
 
 exports.menuitem_list = async function(req, res, next) {
-    
-    menuCategoriesSchema.aggregate([
-        {
+    var aggregation_query = []
+    if(req.body.restaurant_id)
+    aggregation_query.push({
+            $match: {
+                            userRestaurantId: new ObjectId(req.body.restaurant_id)
+                        },
+        });
+    aggregation_query.push(
+        {                
             $lookup: {
                 from: 'menuitems',
                 localField: '_id',
                 foreignField: 'categoryId',
-                as: 'menulist'
-            }
-        }
-    ]).then((menuResult, err) => {
+                as: 'menulist',
+                pipeline: [
+                    {
+                        $match: {
+                             categoryId: new ObjectId(req.body.category_id)
+                        },
+                    },
+                ],
+            },
+        });
+   
+    await menuCategoriesSchema.aggregate(aggregation_query).then((menuResult, err) => {
             if (err) {
                 console.error(err);
                 return;
