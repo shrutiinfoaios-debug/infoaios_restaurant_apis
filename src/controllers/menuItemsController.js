@@ -14,14 +14,64 @@ exports.create_menuitem = async function(req, res) {
 };
 
 exports.menuitem_list = async function(req, res, next) {
-    var aggregation_query = []
-    if(req.body.restaurant_id)
-    aggregation_query.push({
+                
+    var menuItemListMatch = {};
+    var menuCategoryListMatch = [];
+
+    if(req.body.restaurant_id){
+        menuCategoryListMatch = {
+            userRestaurantId: new ObjectId(req.body.restaurant_id)
+        };
+    }
+
+    if(req.body.restaurant_id && req.body.category_id){
+        menuItemListMatch = {
+                            categoryId: new ObjectId(req.body.category_id)
+                        }
+    
+        menuCategoryListMatch = {
+                            userRestaurantId: new ObjectId(req.body.restaurant_id),   
+                            _id: new ObjectId(req.body.category_id)
+                        };           
+    } else if(req.body.restaurant_id){
+        menuCategoryListMatch = {
+            userRestaurantId: new ObjectId(req.body.restaurant_id)
+        };
+    } else {
+        res.status(401).send({message: "parameter missing"});
+        return;
+    }
+
+    await menuCategoriesSchema.aggregate([
+        {
+            $match: menuCategoryListMatch,
+        },
+        {                
+            $lookup: {
+                from: 'menuitems',
+                localField: '_id',
+                foreignField: 'categoryId',
+                as: 'menulist',
+                pipeline: [
+                    {
+                        $match: menuItemListMatch
+                    },
+                ],
+            },
+        }
+    ]).then((menuResult, err) => {
+            if (err) {
+                console.error(err);
+                return;
+            }
+            res.status(200).json(menuResult);
+        });
+    /* await menuCategoriesSchema.aggregate([
+        {
             $match: {
                             userRestaurantId: new ObjectId(req.body.restaurant_id)
                         },
-        });
-    aggregation_query.push(
+        },
         {                
             $lookup: {
                 from: 'menuitems',
@@ -31,21 +81,20 @@ exports.menuitem_list = async function(req, res, next) {
                 pipeline: [
                     {
                         $match: {
-                             categoryId: new ObjectId(req.body.category_id)
+                            filter
                         },
                     },
                 ],
             },
-        });
-   
-    await menuCategoriesSchema.aggregate(aggregation_query).then((menuResult, err) => {
+        }
+    ]).then((menuResult, err) => {
             if (err) {
                 console.error(err);
                 return;
             }
             res.status(200).json(menuResult);
         });
-    
+     */
     /* var filter = {};
     if(req.body.restaurant_id)
             filter.userRestaurantId=req.body.restaurant_id;
