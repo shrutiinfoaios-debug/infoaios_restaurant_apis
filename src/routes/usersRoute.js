@@ -4,6 +4,7 @@ var usersHandlers = require('../controllers/usersController.js');
 const callLogController = require('../controllers/callLogsController.js');
 const menuCategoryController = require('../controllers/menuCategoriesController.js');
 const menuItemsController = require('../controllers/menuItemsController.js');
+const ordersController = require('../controllers/ordersController.js');
 
 router.post('/auth/user_profile', usersHandlers.loginRequired, usersHandlers.profile);
 router.get('/auth/users_list', usersHandlers.loginRequired, usersHandlers.usersList);
@@ -19,5 +20,8 @@ router.post('/menucategory/menucategory_list', usersHandlers.loginRequired, menu
 
 router.post('/menuitem/create_menuitem', usersHandlers.loginRequired, menuItemsController.create_menuitem);
 router.post('/menuitem/menuitem_list', usersHandlers.loginRequired, menuItemsController.menuitem_list);
+
+router.post('/order/create_order', usersHandlers.loginRequired, ordersController.create_order);
+router.get('/order/order_list', usersHandlers.loginRequired, ordersController.order_list);
 
 module.exports = router;

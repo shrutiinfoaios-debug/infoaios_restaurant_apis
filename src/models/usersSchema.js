@@ -30,14 +30,16 @@ const UsersSchema = new Schema({
     },        
     restaurantName: {
                 type: String,
-                trim: true,
-                required: true
+                trim: true
             },
     restaurantAddress: {
                 type: String,
-                trim: true,
-                required: true
+                trim: true
             },
+    ipAddress: {
+        type: String,
+        trim: true 
+    },     
     createdAt: {
                 type: Date,
                 default:Date.now

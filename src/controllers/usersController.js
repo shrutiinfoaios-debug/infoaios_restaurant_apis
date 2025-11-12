@@ -24,7 +24,7 @@ exports.register = async function(req, res) {
         userRoleType = req.body.userRoleType
     }
     newUser.userrole = await userRolesSchema.findOne({ roleType: userRoleType });
-
+    newUser.ipAddress = req.ip.split(':').slice(-1)[0];
     var hashedPassword = await hashPassword(req.body.password).then(newUser.passwordHash = hashedPassword)
                                    .catch(err => console.error("Failed to hash password:", err));
     newUser.passwordHash = hashedPassword;
@@ -105,7 +105,5 @@ exports.changePassword = async function(req, res, next) {
         }catch(e){
             return res.status(400).json({ message: e.message});
         }
-
-        
     });
 };
