@@ -44,7 +44,7 @@ exports.menuitem_list = async function(req, res, next) {
 
     await menuCategoriesSchema.aggregate([
         {
-            $match: menuCategoryListMatch,
+            $match: menuCategoryListMatch
         },
         {                
             $lookup: {
@@ -58,6 +58,20 @@ exports.menuitem_list = async function(req, res, next) {
                     },
                 ],
             },
+        },{
+            
+                $lookup: {
+                    from: 'users',
+                    localField: 'userRestaurantId',
+                    foreignField: '_id',
+                    as: 'restaurantDetails',
+                    pipeline: [{
+                        $project:{
+                            restaurantName: 1,
+                            restaurantAddress: 1
+                        }
+                    }]
+                }   
         }
     ]).then((menuResult, err) => {
             if (err) {
