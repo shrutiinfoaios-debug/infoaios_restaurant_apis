@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
+const AutoIncrement = require('mongoose-sequence')(mongoose);
 
 const ordersSchema = new Schema({
       userRestaurantId: {
@@ -8,8 +9,7 @@ const ordersSchema = new Schema({
         required: true
       },
       orderId: {
-        type: String,
-        required: true
+        type: Number
       },
       customerName: {
         type: String,
@@ -46,4 +46,7 @@ const ordersSchema = new Schema({
       }
 },{ versionKey: false});
 
+ordersSchema.plugin(AutoIncrement, {
+  inc_field: 'orderId'
+});
 module.exports = mongoose.model('orders', ordersSchema);

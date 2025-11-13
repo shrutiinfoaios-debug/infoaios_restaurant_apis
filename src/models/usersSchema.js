@@ -36,6 +36,10 @@ const UsersSchema = new Schema({
                 type: String,
                 trim: true
             },
+    noOfTables: {
+        type: Number,
+        default: null
+    },        
     ipAddress: {
         type: String,
         trim: true 

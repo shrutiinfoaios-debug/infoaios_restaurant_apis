@@ -23,6 +23,10 @@ exports.register = async function(req, res) {
     if(req.body.userRoleType){
         userRoleType = req.body.userRoleType
     }
+
+    if(req.body.noOfTables && req.body.userRoleType == 1){
+        newUser.noOfTables= req.body.noOfTables;
+    }
     newUser.userrole = await userRolesSchema.findOne({ roleType: userRoleType });
     newUser.ipAddress = req.ip.split(':').slice(-1)[0];
     var hashedPassword = await hashPassword(req.body.password).then(newUser.passwordHash = hashedPassword)
