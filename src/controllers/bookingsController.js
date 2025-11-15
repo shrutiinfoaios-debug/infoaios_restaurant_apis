@@ -1,6 +1,9 @@
 const bookingsSchema = require('../models/bookingsSchema');
+const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId;
 
-exports.create_booking = async function(req, res) {
+exports.create_booking = async function(req, res) { 
+
     req.body.createdBy = req.user._id;
     var newBooking = new bookingsSchema(req.body);
     newBooking.ipAddress = req.ip.split(':').slice(-1)[0];
@@ -12,10 +15,31 @@ exports.create_booking = async function(req, res) {
 };
 
 exports.booking_list = async function(req, res, next) {
+        var filter = {};
         if(req.query.restaurantId){
-            var filter = { userRestaurantId: req.query.restaurantId}
+            filter = { userRestaurantId: new ObjectId(req.query.restaurantId) }
         }
-        await bookingsSchema.find(filter).then(function(booking) {
+        
+        await bookingsSchema.aggregate([
+            {
+                $match : filter
+            },
+            {
+                $lookup: {
+                    from: 'users',
+                    localField: 'userRestaurantId',
+                    foreignField: '_id',
+                    as: 'restaurantDetails',
+                    pipeline: [{
+                        $project:{
+                            restaurantName: 1,
+                            restaurantAddress: 1
+                        }
+                    }]
+                }   
+            },
+                 
+        ]).then(function(booking) {
             res.send(booking);
         });
 };

@@ -29,4 +29,4 @@ router.get('/order/order_list', usersHandlers.loginRequired, ordersController.or
 router.post('/booking/create_booking', usersHandlers.loginRequired, bookingsController.create_booking);
 router.get('/booking/booking_list', usersHandlers.loginRequired, bookingsController.booking_list);
 
-module.exports = router;
+module.exports = router ;

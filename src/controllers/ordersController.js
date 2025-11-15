@@ -12,10 +12,30 @@ exports.create_order = async function(req, res) {
 };
 
 exports.order_list = async function(req, res, next) {
+         var filter = {};
         if(req.query.restaurantId){
-            var filter = { userRestaurantId: req.query.restaurantId}
+            filter = { userRestaurantId: req.query.restaurantId }
         }
-        await ordersSchema.find(filter).then(function(order) {
+        await ordersSchema.aggregate([
+            {
+                $match : filter
+            },
+            {
+                $lookup: {
+                    from: 'users',
+                    localField: 'userRestaurantId',
+                    foreignField: '_id',
+                    as: 'restaurantDetails',
+                    pipeline: [{
+                        $project:{
+                            restaurantName: 1,
+                            restaurantAddress: 1
+                        }
+                    }]
+                }   
+            },
+                 
+        ]).then(function(order) {
             res.send(order);
         });
 };
