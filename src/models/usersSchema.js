@@ -52,6 +52,11 @@ const UsersSchema = new Schema({
                 type: mongoose.Schema.Types.ObjectId,
                 ref: 'userroles', 
                 default: null
+    },
+    updatedBy: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'userroles', 
+                default: null
     }
 },{ versionKey: false});
 

@@ -5,6 +5,7 @@ const usersSchema = require('../models/usersSchema');
 const userRolesSchema = require('../models/userRolesSchema');
 const jwtSecretToken = process.env.JWT_SECRET_ACCESS_TOKEN;
 const jwtTokenExpiresDays = process.env.JWT_EXPIRES_DAYS;
+const ObjectId = mongoose.Types.ObjectId;
 async function hashPassword(password) {
   try {
     const saltRounds = 10; // Recommended value, adjust as needed
@@ -110,4 +111,18 @@ exports.changePassword = async function(req, res, next) {
             return res.status(400).json({ message: e.message});
         }
     });
+};
+
+exports.updateUserProfile = async function(req, res, next) {
+    const id = req.params.id;
+    req.body.updatedBy = new ObjectId(req.user._id);
+    
+    const updates = req.body;
+          
+    try{
+        const user = await usersSchema.findByIdAndUpdate(id, updates, { new:true, runValidators: true});
+        return res.status(200).json(user);    
+    } catch(e){
+        return res.status(400).json({ message: e.message});
+    }   
 };
