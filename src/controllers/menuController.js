@@ -72,9 +72,10 @@ exports.menucategory_list = async (req, res, next) => {
 exports.create_menuitem = async (req, res) => {
   try {
     const createdBy = req.user._id;
-    const item = await menuItemsService.createMenuItem(req.body, createdBy);
+    const item = await menuCategoriesService.createMenuItem(req.body, createdBy);
     res.json(item);
   } catch (error) {
+    console.log(error)
     res
       .status(constants.HTTP_500)
       .json({ message: constants.SOMETHING_WENT_WRONG });
@@ -99,7 +100,7 @@ exports.menuitem_list = async (req, res, next) => {
       return res.status(401).json({ message: "parameter missing" });
     }
 
-    const result = await menuItemsService.listMenuItems(
+    const result = await menuCategoriesService.listMenuItems(
       restaurant_id,
       category_id || null
     );

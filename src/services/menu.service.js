@@ -6,6 +6,8 @@
  */
 
 const menuCategoriesSchema = require("../models/menuCategoriesSchema");
+const menuItemSchema = require("../models/menuItemsSchema");
+const mongoose = require("mongoose");
 
 module.exports = {
   /**
@@ -42,7 +44,7 @@ module.exports = {
    * @returns {Promise<Object>} Created menu item
    */
   async createMenuItem(data, createdBy) {
-    const item = new menuItemsSchema({
+    const item = new menuItemSchema({
       ...data,
       createdBy,
     });
