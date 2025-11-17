@@ -57,7 +57,7 @@ exports.sign_in = async function(req, res) {
         }
         return res.json({ token: jwt.sign({ email: user.email, fullName: user.fullName, _id: user._id }, jwtSecretToken, {
             expiresIn: jwtTokenExpiresDays
-        }) });
+        }) , userdetails: user});
         });
     };
 
