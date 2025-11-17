@@ -1,40 +1,51 @@
-const callLogsSchema = require('../models/callLogsSchema');
+/**
+ * @fileoverview Call Logs Controller
+ * Handles Express behavior:
+ * - Creating call logs
+ * - Listing call logs
+ */
 
-exports.create_calllog = async function(req, res) {
-    req.body.createdBy = req.user._id;
-    var newCallLog = new callLogsSchema(req.body);
-    newCallLog.save().then(function(callLog) {
-            return res.json(callLog);
-        }).catch(err => res.status(400).send({
-                message: err
-            }));
+const callLogsService = require("../services/call.service");
+const constants = require("../utils/constants");
+
+/**
+ * @function create_calllog
+ * @description Express controller: creates a new call log entry.
+ *
+ * @route POST /calllog/create_calllog
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ * @returns {Promise<void>}
+ */
+exports.create_calllog = async (req, res) => {
+  try {
+    const callLog = await callLogsService.createCallLog(req.body, req.user._id);
+    res.json(callLog);
+  } catch (error) {
+    res
+      .status(constants.HTTP_500)
+      .json({ message: constants.SOMETHING_WENT_WRONG });
+  }
 };
 
-exports.calllog_list = async function(req, res, next) {
-        var filter = {};
-        if(req.query.restaurantId){
-            filter = { userRestaurantId: req.query.restaurantId}
-        }
-        await callLogsSchema.aggregate([
-            {
-                $match : filter
-            },
-            {
-                $lookup: {
-                    from: 'users',
-                    localField: 'userRestaurantId',
-                    foreignField: '_id',
-                    as: 'restaurantDetails',
-                    pipeline: [{
-                        $project:{
-                            restaurantName: 1,
-                            restaurantAddress: 1
-                        }
-                    }]
-                }   
-            },
-                 
-        ]).then(function(calllog) {
-            res.send(calllog);
-        });
+/**
+ * @function calllog_list
+ * @description Express controller: returns all call logs with optional filtering.
+ *
+ * @route GET /calllog/calllog_list
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ * @param {import('express').NextFunction} next
+ * @returns {Promise<void>}
+ */
+exports.calllog_list = async (req, res, next) => {
+  try {
+    const restaurantId = req.query.restaurantId || null;
+    const logs = await callLogsService.listCallLogs(restaurantId);
+    res.send(logs);
+  } catch (error) {
+    res
+      .status(constants.HTTP_500)
+      .json({ message: constants.SOMETHING_WENT_WRONG });
+  }
 };

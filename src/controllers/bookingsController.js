@@ -1,45 +1,51 @@
-const bookingsSchema = require('../models/bookingsSchema');
-const mongoose = require('mongoose');
-const ObjectId = mongoose.Types.ObjectId;
+/**
+* @fileoverview Bookings Controller
+* Handles Express-level behavior for:
+* - Creating bookings
+* - Listing bookings
+*/
 
-exports.create_booking = async function(req, res) { 
 
-    req.body.createdBy = req.user._id;
-    var newBooking = new bookingsSchema(req.body);
-    newBooking.ipAddress = req.ip.split(':').slice(-1)[0];
-    newBooking.save().then(function(booking) {
-            return res.json(booking);
-        }).catch(err => res.status(400).send({
-                message: err
-            }));
+const bookingsService = require('../services/bookings.service');
+const constants = require('../utils/constants');
+
+
+/**
+* @function create_booking
+* @description Express controller: creates a new booking.
+*
+* @route POST /booking/create_booking
+* @param {import('express').Request} req
+* @param {import('express').Response} res
+* @returns {Promise<void>}
+*/
+exports.create_booking = async (req, res) => {
+try {
+const ip = req.ip.split(':').slice(-1)[0];
+const booking = await bookingsService.createBooking(req.body, req.user._id, ip);
+res.json(booking);
+} catch (error) {
+res.status(constants.HTTP_500).json({ message: constants.SOMETHING_WENT_WRONG });
+}
 };
 
-exports.booking_list = async function(req, res, next) {
-        var filter = {};
-        if(req.query.restaurantId){
-            filter = { userRestaurantId: new ObjectId(req.query.restaurantId) }
-        }
-        
-        await bookingsSchema.aggregate([
-            {
-                $match : filter
-            },
-            {
-                $lookup: {
-                    from: 'users',
-                    localField: 'userRestaurantId',
-                    foreignField: '_id',
-                    as: 'restaurantDetails',
-                    pipeline: [{
-                        $project:{
-                            restaurantName: 1,
-                            restaurantAddress: 1
-                        }
-                    }]
-                }   
-            },
-                 
-        ]).then(function(booking) {
-            res.send(booking);
-        });
+
+/**
+* @function booking_list
+* @description Express controller: returns all bookings (optional filter).
+*
+* @route GET /booking/booking_list
+* @param {import('express').Request} req
+* @param {import('express').Response} res
+* @param {import('express').NextFunction} next
+* @returns {Promise<void>}
+*/
+exports.booking_list = async (req, res, next) => {
+try {
+const restaurantId = req.query.restaurantId || null;
+const bookings = await bookingsService.listBookings(restaurantId);
+res.send(bookings);
+} catch (error) {
+res.status(constants.HTTP_500).json({ message: constants.SOMETHING_WENT_WRONG });
+}
 };

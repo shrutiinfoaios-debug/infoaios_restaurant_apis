@@ -1,0 +1,359 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "AANS AI Restaurant Backend API",
+    "version": "1.0.0",
+    "description": "API documentation for Users, Call Logs, Menu Categories, Menu Items, Orders, and Bookings."
+  },
+
+  "tags": [
+    { "name": "Users" },
+    { "name": "Authentication" },
+    { "name": "Call Logs" },
+    { "name": "Menu Categories" },
+    { "name": "Menu Items" },
+    { "name": "Orders" },
+    { "name": "Bookings" }
+  ],
+
+  "paths": {
+    "/auth/register": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "Register a new user",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/RegisterUser" }
+            }
+          }
+        },
+        "responses": { "200": { "description": "User created" } }
+      }
+    },
+
+    "/auth/sign_in": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "Sign in user and return JWT token",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/LoginUser" }
+            }
+          }
+        },
+        "responses": { "200": { "description": "Login successful" } }
+      }
+    },
+
+    "/auth/user_profile": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "Get logged-in user profile",
+        "responses": { "200": { "description": "Profile returned" } }
+      }
+    },
+
+    "/auth/users_list": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Get list of users",
+        "responses": { "200": { "description": "Users retrieved" } }
+      }
+    },
+
+    "/auth/change_password": {
+      "put": {
+        "tags": ["Authentication"],
+        "summary": "Change user password",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/ChangePassword" }
+            }
+          }
+        },
+        "responses": { "200": { "description": "Password changed successfully" } }
+      }
+    },
+
+    "/auth/update_user_profile/{id}": {
+      "put": {
+        "tags": ["Users"],
+        "summary": "Update user profile",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": { "200": { "description": "Profile updated" } }
+      }
+    },
+
+    "/calllog/create_calllog": {
+      "post": {
+        "tags": ["Call Logs"],
+        "summary": "Create a call log entry",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CreateCallLog" }
+            }
+          }
+        },
+        "responses": { "200": { "description": "Call log created" } }
+      }
+    },
+
+    "/calllog/calllog_list": {
+      "get": {
+        "tags": ["Call Logs"],
+        "summary": "Get list of call logs",
+        "parameters": [
+          {
+            "name": "restaurantId",
+            "in": "query",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": { "200": { "description": "List returned" } }
+      }
+    },
+
+    "/menucategory/create_menucategory": {
+      "post": {
+        "tags": ["Menu Categories"],
+        "summary": "Create menu category",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CreateMenuCategory" }
+            }
+          }
+        },
+        "responses": { "200": { "description": "Category created" } }
+      }
+    },
+
+    "/menucategory/menucategory_list": {
+      "post": {
+        "tags": ["Menu Categories"],
+        "summary": "List categories by restaurant",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { 
+                "type": "object",
+                "required": ["restaurant_id"],
+                "properties": {
+                  "restaurant_id": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": { "200": { "description": "Categories returned" } }
+      }
+    },
+
+    "/menuitem/create_menuitem": {
+      "post": {
+        "tags": ["Menu Items"],
+        "summary": "Create a menu item",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CreateMenuItem" }
+            }
+          }
+        },
+        "responses": { "200": { "description": "Menu item created" } }
+      }
+    },
+
+    "/menuitem/menuitem_list": {
+      "post": {
+        "tags": ["Menu Items"],
+        "summary": "List menu items by category/restaurant",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/MenuItemFilter" }
+            }
+          }
+        },
+        "responses": { "200": { "description": "Menu items returned" } }
+      }
+    },
+
+    "/order/create_order": {
+      "post": {
+        "tags": ["Orders"],
+        "summary": "Create order for restaurant",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CreateOrder" }
+            }
+          }
+        },
+        "responses": { "200": { "description": "Order created" } }
+      }
+    },
+
+    "/order/order_list": {
+      "get": {
+        "tags": ["Orders"],
+        "summary": "List orders",
+        "parameters": [
+          {
+            "name": "restaurantId",
+            "in": "query",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": { "200": { "description": "Orders returned" } }
+      }
+    },
+
+    "/booking/create_booking": {
+      "post": {
+        "tags": ["Bookings"],
+        "summary": "Create booking",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CreateBooking" }
+            }
+          }
+        },
+        "responses": { "200": { "description": "Booking created" } }
+      }
+    },
+
+    "/booking/booking_list": {
+      "get": {
+        "tags": ["Bookings"],
+        "summary": "List bookings",
+        "parameters": [
+          {
+            "name": "restaurantId",
+            "in": "query",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": { "200": { "description": "Bookings returned" } }
+      }
+    }
+  },
+
+  "components": {
+    "schemas": {
+      "RegisterUser": {
+        "type": "object",
+        "required": ["email", "password", "fullName"],
+        "properties": {
+          "fullName": { "type": "string" },
+          "email": { "type": "string" },
+          "password": { "type": "string" },
+          "userRoleType": { "type": "number" },
+          "noOfTables": { "type": "number" }
+        }
+      },
+
+      "LoginUser": {
+        "type": "object",
+        "required": ["email", "password", "userRoleType"],
+        "properties": {
+          "email": { "type": "string" },
+          "password": { "type": "string" },
+          "userRoleType": { "type": "number" }
+        }
+      },
+
+      "ChangePassword": {
+        "type": "object",
+        "required": ["old_password", "new_password"],
+        "properties": {
+          "old_password": { "type": "string" },
+          "new_password": { "type": "string" }
+        }
+      },
+
+      "CreateCallLog": {
+        "type": "object",
+        "required": ["userRestaurantId", "callType", "phoneNumber"],
+        "properties": {
+          "userRestaurantId": { "type": "string" },
+          "callType": { "type": "string" },
+          "phoneNumber": { "type": "string" },
+          "notes": { "type": "string" }
+        }
+      },
+
+      "CreateMenuCategory": {
+        "type": "object",
+        "required": ["name", "userRestaurantId"],
+        "properties": {
+          "name": { "type": "string" },
+          "userRestaurantId": { "type": "string" }
+        }
+      },
+
+      "CreateMenuItem": {
+        "type": "object",
+        "required": ["name", "price", "categoryId"],
+        "properties": {
+          "name": { "type": "string" },
+          "price": { "type": "number" },
+          "categoryId": { "type": "string" },
+          "userRestaurantId": { "type": "string" }
+        }
+      },
+
+      "MenuItemFilter": {
+        "type": "object",
+        "properties": {
+          "restaurant_id": { "type": "string" },
+          "category_id": { "type": "string" }
+        }
+      },
+
+      "CreateOrder": {
+        "type": "object",
+        "required": ["userRestaurantId"],
+        "properties": {
+          "userRestaurantId": { "type": "string" },
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "menuItemId": { "type": "string" },
+                "quantity": { "type": "number" }
+              }
+            }
+          },
+          "totalAmount": { "type": "number" }
+        }
+      },
+
+      "CreateBooking": {
+        "type": "object",
+        "required": ["userRestaurantId", "customerName", "tableNumber"],
+        "properties": {
+          "userRestaurantId": { "type": "string" },
+          "customerName": { "type": "string" },
+          "tableNumber": { "type": "number" },
+          "bookingTime": { "type": "string", "format": "date-time" }
+        }
+      }
+    }
+  }
+}
