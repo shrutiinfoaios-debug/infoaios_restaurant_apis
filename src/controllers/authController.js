@@ -11,6 +11,7 @@
 const authService = require('../services/auth.service');
 const jwtSecretToken = process.env.JWT_SECRET_ACCESS_TOKEN;
 const jwtTokenExpiresDays = process.env.JWT_EXPIRES_DAYS;
+const constants = require('../utils/constants')
 
 module.exports.UserDecodeJwt = function (req, res, next) {
   /**

@@ -10,11 +10,10 @@
  * The controller should call these functions only.
  */
 
-const jwt = require('jsonwebtoken');
-const usersSchema = require('../models/usersSchema');
-const userRolesSchema = require('../models/userRolesSchema');
-const { hashPassword } = require('../utils/utils');
-const constants = require('../utils/constants');
+const jwt = require("jsonwebtoken");
+const usersSchema = require("../models/usersSchema");
+const userRolesSchema = require("../models/userRolesSchema");
+const { hashPassword } = require("../utils/utils");
 
 module.exports = {
   /**
@@ -106,6 +105,5 @@ module.exports = {
     const hashed = await hashPassword(newPass);
     await usersSchema.updateOne({ _id: userId }, { passwordHash: hashed });
     return true;
-  }
+  },
 };
-
