@@ -18,7 +18,6 @@ const port = process.env.PORT || constants.PORT;
 })();
 
 const routes = require('./src/routes/routes');
-const { UserDecodeJwt } = require('./src/controllers/authController');
 
 // CORS
 app.use(cors());
@@ -30,8 +29,6 @@ app.use(bodyParser.json());
 // Swagger docs
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-// JWT middleware
-app.use(UserDecodeJwt);
 
 // Log every request
 app.use(requestLogger);

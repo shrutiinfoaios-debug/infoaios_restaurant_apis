@@ -7,6 +7,7 @@ const callLogController = require("../controllers/callLogsController.js");
 const menuController = require("../controllers/menuController.js");
 const ordersController = require("../controllers/ordersController.js");
 const bookingsController = require("../controllers/bookingsController.js");
+const { UserDecodeJwt } = require("../controllers/authController.js");
 
 /**
  * @fileoverview
@@ -28,19 +29,19 @@ const bookingsController = require("../controllers/bookingsController.js");
  * @route POST /auth/user_profile
  * @description Get the profile of the logged-in user.
  */
-router.post("/auth/user_profile", usersHandlers.profile);
+router.post("/auth/user_profile", UserDecodeJwt, usersHandlers.profile);
 
 /**
  * @route GET /auth/users_list
  * @description Fetch the list of all users.
  */
-router.get("/auth/users_list", usersHandlers.usersList);
+router.get("/auth/users_list", UserDecodeJwt, usersHandlers.usersList);
 
 /**
  * @route PUT /auth/change_password
  * @description Change user password.
  */
-router.put("/auth/change_password", authController.changePassword);
+router.put("/auth/change_password", UserDecodeJwt, authController.changePassword);
 
 /**
  * @route POST /auth/register
@@ -59,8 +60,7 @@ router.post("/auth/sign_in", authController.sign_in);
  * @description Update profile information of a specific user.
  * @param {string} id - User ID
  */
-router.put("/auth/update_user_profile/:id", usersHandlers.updateUserProfile);
-
+router.put("/auth/update_user_profile/:id", UserDecodeJwt, usersHandlers.updateUserProfile);
 
 /* -------------------------------------------------------------------------- */
 /*                                 CALL LOGS                                   */
@@ -70,14 +70,13 @@ router.put("/auth/update_user_profile/:id", usersHandlers.updateUserProfile);
  * @route POST /calllog/create_calllog
  * @description Create a new call log entry.
  */
-router.post("/calllog/create_calllog", callLogController.create_calllog);
+router.post("/calllog/create_calllog", UserDecodeJwt, callLogController.create_calllog);
 
 /**
  * @route GET /calllog/calllog_list
  * @description Retrieve list of call logs.
  */
-router.get("/calllog/calllog_list", callLogController.calllog_list);
-
+router.get("/calllog/calllog_list", UserDecodeJwt, callLogController.calllog_list);
 
 /* -------------------------------------------------------------------------- */
 /*                           MENU CATEGORIES                                   */
@@ -89,6 +88,7 @@ router.get("/calllog/calllog_list", callLogController.calllog_list);
  */
 router.post(
   "/menucategory/create_menucategory",
+  UserDecodeJwt,
   menuController.create_menucategory
 );
 
@@ -98,9 +98,9 @@ router.post(
  */
 router.post(
   "/menucategory/menucategory_list",
+  UserDecodeJwt,
   menuController.menucategory_list
 );
-
 
 /* -------------------------------------------------------------------------- */
 /*                               MENU ITEMS                                    */
@@ -110,20 +110,13 @@ router.post(
  * @route POST /menuitem/create_menuitem
  * @description Create a new menu item.
  */
-router.post(
-  "/menuitem/create_menuitem",
-  menuController.create_menuitem
-);
+router.post("/menuitem/create_menuitem", UserDecodeJwt, menuController.create_menuitem);
 
 /**
  * @route POST /menuitem/menuitem_list
  * @description Retrieve list of menu items.
  */
-router.post(
-  "/menuitem/menuitem_list",
-  menuController.menuitem_list
-);
-
+router.post("/menuitem/menuitem_list", UserDecodeJwt, menuController.menuitem_list);
 
 /* -------------------------------------------------------------------------- */
 /*                                  ORDERS                                     */
@@ -133,14 +126,13 @@ router.post(
  * @route POST /order/create_order
  * @description Create a new order for a customer.
  */
-router.post("/order/create_order", ordersController.create_order);
+router.post("/order/create_order", UserDecodeJwt, ordersController.create_order);
 
 /**
  * @route GET /order/order_list
  * @description Retrieve list of all orders.
  */
-router.get("/order/order_list", ordersController.order_list);
-
+router.get("/order/order_list", UserDecodeJwt, ordersController.order_list);
 
 /* -------------------------------------------------------------------------- */
 /*                                 BOOKINGS                                    */
@@ -150,13 +142,12 @@ router.get("/order/order_list", ordersController.order_list);
  * @route POST /booking/create_booking
  * @description Create a new booking entry (table reservation).
  */
-router.post("/booking/create_booking", bookingsController.create_booking);
+router.post("/booking/create_booking", UserDecodeJwt, bookingsController.create_booking);
 
 /**
  * @route GET /booking/booking_list
  * @description Retrieve list of all bookings.
  */
-router.get("/booking/booking_list", bookingsController.booking_list);
-
+router.get("/booking/booking_list", UserDecodeJwt, bookingsController.booking_list);
 
 module.exports = router;
