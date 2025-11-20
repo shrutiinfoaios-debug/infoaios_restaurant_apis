@@ -7,6 +7,7 @@ const callLogController = require("../controllers/callLogsController.js");
 const menuController = require("../controllers/menuController.js");
 const ordersController = require("../controllers/ordersController.js");
 const bookingsController = require("../controllers/bookingsController.js");
+const feedbacksController = require("../controllers/feedbacksController.js");
 const { UserDecodeJwt } = require("../controllers/authController.js");
 
 /**
@@ -149,5 +150,17 @@ router.post("/booking/create_booking", UserDecodeJwt, bookingsController.create_
  * @description Retrieve list of all bookings.
  */
 router.get("/booking/booking_list", UserDecodeJwt, bookingsController.booking_list);
+
+/**
+ * @route POST /feedback/create_feedback
+ * @description Create a new feedback entry (table reservation).
+ */
+router.post("/feedback/create_feedback", UserDecodeJwt, feedbacksController.create_feedback);
+
+/**
+ * @route GET /feedback/feedback_list
+ * @description Retrieve list of all feedback.
+ */
+router.get("/feedback/feedback_list", UserDecodeJwt, feedbacksController.feedback_list);
 
 module.exports = router;

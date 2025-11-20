@@ -81,7 +81,7 @@ module.exports.sign_in = async function (req, res) {
       return res.status(401).json({ message: 'Authentication failed. Invalid user or password.' });
     }
 
-    res.json({ token });
+    res.json( token );
   } catch (error) {
     res.status(constants.HTTP_500).json({ message: constants.SOMETHING_WENT_WRONG });
   }

@@ -86,7 +86,7 @@ module.exports = {
       { expiresIn: expiry }
     );
 
-    return token;
+    return {token: token, userdetails: user};
   },
 
   /**

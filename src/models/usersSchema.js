@@ -65,6 +65,3 @@ return bcrypt.compareSync(password, this.passwordHash);
 };
 
 module.exports = mongoose.model('users', UsersSchema);
-
-
-    
