@@ -27,6 +27,10 @@ const bookingsSchema = new Schema({
         type : Number,
         required: true
       },
+      tableNo: {
+        type : Number,
+        default: null
+      },
       status: {
         type: String,
         required: true
