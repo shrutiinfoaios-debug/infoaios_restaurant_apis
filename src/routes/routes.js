@@ -135,6 +135,18 @@ router.post("/order/create_order", UserDecodeJwt, ordersController.create_order)
  */
 router.get("/order/order_list", UserDecodeJwt, ordersController.order_list);
 
+/**
+ * @route POST /order/view_order/:id
+ * @description Create a new order for a customer.
+ */
+router.post("/order/view_order/:id", UserDecodeJwt, ordersController.view_order);
+
+/**
+ * @route PUT /order/update_order/:id
+ * @description Update order information of a specific order.
+ * @param {string} id - Order ID
+ */
+router.put("/order/update_order/:id", UserDecodeJwt, ordersController.update_order);
 /* -------------------------------------------------------------------------- */
 /*                                 BOOKINGS                                    */
 /* -------------------------------------------------------------------------- */

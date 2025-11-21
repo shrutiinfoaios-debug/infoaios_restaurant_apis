@@ -51,3 +51,47 @@ exports.order_list = async (req, res, next) => {
       .json({ message: constants.SOMETHING_WENT_WRONG });
   }
 };
+
+/**
+ * @function view_order
+ * @description Express controller: renders order detail.
+ *
+ * @route POST /order/order_view/:id
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ * @returns {Promise<void>}
+ */
+exports.view_order = async (req, res) => {
+  try {
+    const viewOrder = await ordersService.viewOrder(
+      req.params.id
+    );
+
+    res.status(200).json(viewOrder);
+  } catch (e) {
+    res.status(constants.HTTP_400).json({ message: e.message });
+  }
+};  
+
+  /**
+   * @function update_order
+   * @description Express controller: updates a order detail.
+   *
+   * @route PUT /order/update_order/:id
+   * @param {import('express').Request} req
+   * @param {import('express').Response} res
+   * @returns {Promise<void>}
+   */
+  exports.update_order = async (req, res) => {
+    try {
+      const updatedOrder = await ordersService.updateOrder(
+        req.params.id,
+        req.body,
+        req.user._id
+      );
+  
+      res.status(200).json(updatedOrder);
+    } catch (e) {
+      res.status(constants.HTTP_400).json({ message: e.message });
+    }
+  };

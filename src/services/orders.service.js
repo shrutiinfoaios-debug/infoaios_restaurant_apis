@@ -3,10 +3,13 @@
  * Handles business logic:
  * - Creating restaurant orders
  * - Listing restaurant orders
+ * - Rendering particular restaurant order
+ * - Updating restaurant order
  */
 
 const ordersSchema = require("../models/ordersSchema");
-
+const mongoose = require("mongoose");
+const ObjectId = mongoose.Types.ObjectId;
 module.exports = {
   /**
    * @function createOrder
@@ -37,4 +40,31 @@ module.exports = {
     const filter = restaurantId ? { userRestaurantId: restaurantId } : {};
     return ordersSchema.find(filter);
   },
+
+  /**
+   * @function viewOrder
+   * @description renders order details
+   * @param {string} id - Order ID to view
+   * @returns {Promise<Object|null>} rendered order document
+   */
+  async viewOrder(id) {
+    return ordersSchema.findById(id);
+  },
+
+  /**
+     * @function updateOrder
+     * @description Updates order with validation.
+     *
+     * @param {string} id - Order ID to update
+     * @param {Object} updates - Updated fields
+     * @param {string} updatedBy - Authenticated user's ID
+     * @returns {Promise<Object|null>} Updated order document
+     */
+    async updateOrder(id, updates, updatedBy) {
+      updates.updatedBy = new ObjectId(updatedBy);
+      return ordersSchema.findByIdAndUpdate(id, updates, {
+        new: true,
+        runValidators: true,
+      });
+    },
 };
