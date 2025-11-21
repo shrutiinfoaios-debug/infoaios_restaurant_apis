@@ -3,9 +3,13 @@
  * Handles business logic for:
  * - Creating bookings
  * - Listing bookings
+ * - Rendering particular restaurant booking
+ * - Updating restaurant booking
  */
 
 const bookingsSchema = require("../models/bookingsSchema");
+const mongoose = require("mongoose");
+const ObjectId = mongoose.Types.ObjectId;
 
 module.exports = {
   /**
@@ -37,5 +41,59 @@ module.exports = {
   async listBookings(restaurantId) {
     const filter = restaurantId ? { userRestaurantId: restaurantId } : {};
     return bookingsSchema.find(filter);
+  },
+
+  /**
+   * @function viewOrder
+   * @description renders order details
+   * @param {string} id - Order ID to view
+   * @returns {Promise<Object|null>} rendered order document
+   */
+  async viewOrder(id) {
+    return ordersSchema.findById(id);
+  },
+
+/**
+   * @function updateOrder
+   * @description Updates order with validation.
+   *
+   * @param {string} id - Order ID to update
+   * @param {Object} updates - Updated fields
+   * @param {string} updatedBy - Authenticated user's ID
+   * @returns {Promise<Object|null>} Updated order document
+   */
+  async updateBooking(id, updates, updatedBy) {
+    updates.updatedBy = new ObjectId(updatedBy);
+    return bookingsSchema.findByIdAndUpdate(id, updates, {
+      new: true,
+      runValidators: true,
+    });
+  },
+
+  /**
+   * @function viewBooking
+   * @description renders booking details
+   * @param {string} id - Booking ID to view
+   * @returns {Promise<Object|null>} rendered booking document
+   */
+  async viewBooking(id) {
+    return bookingsSchema.findById(id);
+  },
+
+  /**
+   * @function updateBooking
+   * @description Updates booking with validation.
+   *
+   * @param {string} id - Booking ID to update
+   * @param {Object} updates - Updated fields
+   * @param {string} updatedBy - Authenticated user's ID
+   * @returns {Promise<Object|null>} Updated booking document
+   */
+  async updateBooking(id, updates, updatedBy) {
+    updates.updatedBy = new ObjectId(updatedBy);
+    return bookingsSchema.findByIdAndUpdate(id, updates, {
+      new: true,
+      runValidators: true,
+    });
   },
 };

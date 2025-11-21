@@ -54,3 +54,47 @@ exports.booking_list = async (req, res, next) => {
       .json({ message: constants.SOMETHING_WENT_WRONG });
   }
 };
+
+/**
+ * @function view_booking
+ * @description Express controller: renders booking detail.
+ *
+ * @route POST /booking/booking_view/:id
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ * @returns {Promise<void>}
+ */
+exports.view_booking = async (req, res) => {
+  try {
+    const viewBooking = await bookingsService.viewBooking(
+      req.params.id
+    );
+
+    res.status(200).json(viewBooking);
+  } catch (e) {
+    res.status(constants.HTTP_400).json({ message: e.message });
+  }
+};  
+
+  /**
+   * @function update_booking
+   * @description Express controller: updates a booking detail.
+   *
+   * @route PUT /booking/update_booking/:id
+   * @param {import('express').Request} req
+   * @param {import('express').Response} res
+   * @returns {Promise<void>}
+   */
+  exports.update_booking = async (req, res) => {
+    try {
+      const updatedBooking = await bookingsService.updateBooking(
+        req.params.id,
+        req.body,
+        req.user._id
+      );
+  
+      res.status(200).json(updatedBooking);
+    } catch (e) {
+      res.status(constants.HTTP_400).json({ message: e.message });
+    }
+  };

@@ -43,6 +43,11 @@ const bookingsSchema = new Schema({
         type:mongoose.Schema.Types.ObjectId,
         ref:"users",
         default: null
+      },
+      updatedBy:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"users",
+        default: null
       }
 },{ versionKey: false});
 

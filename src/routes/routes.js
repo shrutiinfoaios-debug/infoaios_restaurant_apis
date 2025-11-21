@@ -164,6 +164,22 @@ router.post("/booking/create_booking", UserDecodeJwt, bookingsController.create_
 router.get("/booking/booking_list", UserDecodeJwt, bookingsController.booking_list);
 
 /**
+ * @route POST /booking/view_booking/:id
+ * @description Create a new booking for a customer.
+ */
+router.post("/booking/view_booking/:id", UserDecodeJwt, bookingsController.view_booking);
+
+/**
+ * @route PUT /booking/update_booking/:id
+ * @description Update booking information of a specific booking.
+ * @param {string} id - booking ID
+ */
+router.put("/booking/update_booking/:id", UserDecodeJwt, bookingsController.update_booking);
+
+/* -------------------------------------------------------------------------- */
+/*                                 FEEDBACKS                                    */
+/* -------------------------------------------------------------------------- */
+/**
  * @route POST /feedback/create_feedback
  * @description Create a new feedback entry (table reservation).
  */
