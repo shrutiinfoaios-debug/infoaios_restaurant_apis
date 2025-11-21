@@ -147,6 +147,13 @@ router.post("/order/view_order/:id", UserDecodeJwt, ordersController.view_order)
  * @param {string} id - Order ID
  */
 router.put("/order/update_order/:id", UserDecodeJwt, ordersController.update_order);
+
+/**
+ * @route DELETE /order/delete_order/:id
+ * @description Delete a order for a restaurant table.
+ */
+router.delete("/order/delete_order/:id", UserDecodeJwt, ordersController.delete_order);
+
 /* -------------------------------------------------------------------------- */
 /*                                 BOOKINGS                                    */
 /* -------------------------------------------------------------------------- */
@@ -175,6 +182,12 @@ router.post("/booking/view_booking/:id", UserDecodeJwt, bookingsController.view_
  * @param {string} id - booking ID
  */
 router.put("/booking/update_booking/:id", UserDecodeJwt, bookingsController.update_booking);
+
+/**
+ * @route DELETE /booking/delete_booking/:id
+ * @description Delete a booking for a restaurant table.
+ */
+router.delete("/booking/delete_booking/:id", UserDecodeJwt, bookingsController.delete_booking);
 
 /* -------------------------------------------------------------------------- */
 /*                                 FEEDBACKS                                    */

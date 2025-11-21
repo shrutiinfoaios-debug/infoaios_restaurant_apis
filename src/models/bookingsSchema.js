@@ -35,6 +35,10 @@ const bookingsSchema = new Schema({
         type: String,
         required: true
       },
+      isDeleted: {
+        type: Boolean,
+        default: false
+      },
       createdAt: {
          type: Date,
          default:Date.now
@@ -45,6 +49,11 @@ const bookingsSchema = new Schema({
         default: null
       },
       updatedBy:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"users",
+        default: null
+      },
+      deletedBy:{
         type:mongoose.Schema.Types.ObjectId,
         ref:"users",
         default: null

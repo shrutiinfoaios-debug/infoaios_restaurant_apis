@@ -40,6 +40,7 @@ module.exports = {
    */
   async listBookings(restaurantId) {
     const filter = restaurantId ? { userRestaurantId: restaurantId } : {};
+    filter.isDeleted = false;
     return bookingsSchema.find(filter);
   },
 
@@ -91,6 +92,24 @@ module.exports = {
    */
   async updateBooking(id, updates, updatedBy) {
     updates.updatedBy = new ObjectId(updatedBy);
+    return bookingsSchema.findByIdAndUpdate(id, updates, {
+      new: true,
+      runValidators: true,
+    });
+  },
+
+  /**
+   * @function deleteBooking
+   * @description Deletes booking with validation.
+   *
+   * @param {string} id - Booking ID to delete
+   * @param {string} deletedBy - Authenticated user's ID
+   * @returns {Promise<Object|null>} Deleted booking message
+   */
+  async deleteBooking(id, deletedBy) {
+    updates = {}
+    updates.deletedBy = new ObjectId(deletedBy);
+    updates.isDeleted = true;
     return bookingsSchema.findByIdAndUpdate(id, updates, {
       new: true,
       runValidators: true,

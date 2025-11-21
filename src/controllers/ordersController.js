@@ -95,3 +95,26 @@ exports.view_order = async (req, res) => {
       res.status(constants.HTTP_400).json({ message: e.message });
     }
   };
+
+  /**
+   * @function delete_order
+   * @description Express controller: deletes a order.
+   *
+   * @route DELETE /order/delete_order/:id
+   * @param {import('express').Request} req
+   * @param {import('express').Response} res
+   * @returns {Promise<void>}
+   */
+  exports.delete_order = async (req, res) => {
+    try {
+      const deletedOrder = await ordersService.deleteOrder(
+        req.params.id,
+        req.user._id
+      );
+  
+      res.status(200).json(deletedOrder);
+    } catch (e) {
+      res.status(constants.HTTP_400).json({ message: e.message });
+    } 
+  };  
+  

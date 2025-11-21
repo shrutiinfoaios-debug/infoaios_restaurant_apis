@@ -5,6 +5,7 @@
  * - Listing restaurant orders
  * - Rendering particular restaurant order
  * - Updating restaurant order
+ * - Deleting restaurant order
  */
 
 const ordersSchema = require("../models/ordersSchema");
@@ -38,6 +39,7 @@ module.exports = {
    */
   async listOrders(restaurantId) {
     const filter = restaurantId ? { userRestaurantId: restaurantId } : {};
+    filter.isDeleted = false;
     return ordersSchema.find(filter);
   },
 
@@ -62,6 +64,25 @@ module.exports = {
      */
     async updateOrder(id, updates, updatedBy) {
       updates.updatedBy = new ObjectId(updatedBy);
+      return ordersSchema.findByIdAndUpdate(id, updates, {
+        new: true,
+        runValidators: true,
+      });
+    },
+
+
+    /**
+     * @function deleteOrder
+     * @description Deletes order with validation.
+     *
+     * @param {string} id - Order ID to delete
+     * @param {string} deletedBy - Authenticated user's ID
+     * @returns {Promise<Object|null>} Deleted order message
+     */
+    async deleteOrder(id, deletedBy) {
+      updates = {}
+      updates.deletedBy = new ObjectId(deletedBy);
+      updates.isDeleted = true;
       return ordersSchema.findByIdAndUpdate(id, updates, {
         new: true,
         runValidators: true,

@@ -98,3 +98,26 @@ exports.view_booking = async (req, res) => {
       res.status(constants.HTTP_400).json({ message: e.message });
     }
   };
+
+
+/**
+   * @function delete_booking
+   * @description Express controller: deletes a booking.
+   *
+   * @route DELETE /booking/delete_booking/:id
+   * @param {import('express').Request} req
+   * @param {import('express').Response} res
+   * @returns {Promise<void>}
+   */
+  exports.delete_booking = async (req, res) => {
+    try {
+      const deletedBooking = await bookingsService.deleteBooking(
+        req.params.id,
+        req.user._id
+      );
+  
+      res.status(200).json(deletedBooking);
+    } catch (e) {
+      res.status(constants.HTTP_400).json({ message: e.message });
+    } 
+  };  

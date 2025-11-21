@@ -35,6 +35,10 @@ const ordersSchema = new Schema({
         type: String,
         required: true
       },
+      isDeleted: {
+        type: Boolean,
+        default: false
+      },
       createdAt: {
          type: Date,
          default:Date.now
@@ -48,7 +52,13 @@ const ordersSchema = new Schema({
         type:mongoose.Schema.Types.ObjectId,
         ref:"users",
         default: null
+      },
+      deletedBy:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"users",
+        default: null
       }
+
 },{ versionKey: false});
 
 ordersSchema.plugin(AutoIncrement, {
