@@ -7,15 +7,19 @@ const callLogsSchema = new Schema({
         ref: 'users',
         required: true
       },
+      callerName: {
+        type: String,
+        required: true
+      },
       callerNumber: {
         type: String,
         required: true
       },
-      receiverNumber: {
+      callDuration: {
         type: String,
         required: true
       },
-      duration: {
+      callConversation: {
         type: String,
         required: true
       },
@@ -23,18 +27,13 @@ const callLogsSchema = new Schema({
         type: String,
         required: true
       },
-      status: {
+      purpose: {
         type: String,
         required: true
       },
-      createdAt: {
+      calledAt: {
          type: Date,
          default:Date.now
-      },
-      createdBy:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:"users",
-        default: null
       }
 },{ versionKey: false});
 
