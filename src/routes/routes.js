@@ -204,4 +204,10 @@ router.post("/feedback/create_feedback", UserDecodeJwt, feedbacksController.crea
  */
 router.get("/feedback/feedback_list", UserDecodeJwt, feedbacksController.feedback_list);
 
+/**
+ * @route PUT /feedback/hide_show_feedback
+ * @description Hide or Show feedback.
+ */
+router.put("/feedback/hide_show_feedback/:id", UserDecodeJwt, feedbacksController.hide_show_feedback);
+
 module.exports = router;

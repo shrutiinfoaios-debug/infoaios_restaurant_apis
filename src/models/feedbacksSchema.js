@@ -19,6 +19,10 @@ const feedbacksSchema = new Schema({
       comment:{
         type: String 
       },
+      isVisible:{
+        type: Boolean,
+        default: true 
+      },
       createdAt: {
          type: Date,
          default:Date.now

@@ -3,6 +3,7 @@
  * Handles Express behavior:
  * - Creating feedbacks
  * - Listing feedbacks
+ * - Hide or Show feedbacks
  */
 
 const feedbacksService = require("../services/feedback.service");
@@ -49,3 +50,28 @@ exports.feedback_list = async (req, res, next) => {
       .json({ message: constants.SOMETHING_WENT_WRONG });
   }
 };
+
+
+/**
+   * @function hide_show_feedback
+   * @description Express controller: hide or show a feedback.
+   *
+   * @route PUT /feedback/hide_show_feedback/:id
+   * @param {import('express').Request} req
+   * @param {import('express').Response} res
+   * @returns {Promise<void>}
+   */
+  exports.hide_show_feedback = async (req, res) => {
+    try {
+      const hideShowFeedback = await feedbacksService.hideShowFeedback(
+        req.params.id,
+        req.body.isVisible,
+        req.user._id
+      );
+  
+      res.status(200).json(hideShowFeedback);
+    } catch (e) {
+      res.status(constants.HTTP_400).json({ message: e.message });
+    } 
+  };
+  

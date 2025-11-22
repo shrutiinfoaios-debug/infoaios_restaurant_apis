@@ -3,10 +3,12 @@
  * Handles business logic:
  * - Creating feedbacks
  * - Listing feedbacks with restaurant info lookup
+ * - Hide or show feedback
  */
 
 const feedbacksSchema = require("../models/feedbacksSchema");
 const mongoose = require("mongoose");
+const ObjectId = mongoose.Types.ObjectId;
 
 module.exports = {
   /**
@@ -36,7 +38,7 @@ module.exports = {
     const filter = restaurantId
       ? { userRestaurantId: new mongoose.Types.ObjectId(restaurantId) }
       : {};
-
+    filter.isVisible = true;
     return feedbacksSchema.aggregate([
       { $match: filter },
       {
@@ -56,5 +58,24 @@ module.exports = {
         },
       },
     ]);
+  },
+
+  /**
+   * @function hideShowFeedback
+   * @description Hide or Show feedback .
+   *
+   * @param {string} id - Feedback ID to hide or show
+   * @param {string} updatedBy - Authenticated user's ID
+   * @param {boolean} isVisible - true or false
+   * @returns {Promise<Object|null>} updated feedback 
+   */
+  async hideShowFeedback(id, isVisible, updatedBy) {
+    updates = {}
+    updates.updatedBy = new ObjectId(updatedBy);
+    updates.isVisible = isVisible;
+    return feedbacksSchema.findByIdAndUpdate(id, updates, {
+      new: true,
+      runValidators: true,
+    });
   },
 };
