@@ -8,6 +8,7 @@ const menuController = require("../controllers/menuController.js");
 const ordersController = require("../controllers/ordersController.js");
 const bookingsController = require("../controllers/bookingsController.js");
 const feedbacksController = require("../controllers/feedbacksController.js");
+const tableTypesController = require("../controllers/tableTypesController.js");
 const { UserDecodeJwt } = require("../controllers/authController.js");
 
 /**
@@ -209,5 +210,21 @@ router.get("/feedback/feedback_list", UserDecodeJwt, feedbacksController.feedbac
  * @description Hide or Show feedback.
  */
 router.put("/feedback/hide_show_feedback/:id", UserDecodeJwt, feedbacksController.hide_show_feedback);
+
+/* -------------------------------------------------------------------------- */
+/*                                 TABLETYPE                                    */
+/* -------------------------------------------------------------------------- */
+/**
+ * @route POST /tabletype/create_tableType
+ * @description Create a new tableType entry (table reservation).
+ */
+router.post("/tabletype/create_tabletype", UserDecodeJwt, tableTypesController.create_tabletype);
+
+/**
+ * @route GET /tabletype/tabletype_list
+ * @description Retrieve list of all tabletypes.
+ */
+router.get("/tabletype/tabletype_list", UserDecodeJwt, tableTypesController.tabletype_list);
+
 
 module.exports = router;

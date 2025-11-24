@@ -38,7 +38,7 @@ module.exports = {
     const filter = restaurantId
       ? { userRestaurantId: new mongoose.Types.ObjectId(restaurantId) }
       : {};
-    filter.isVisible = true;
+    //filter.isVisible = true;
     return feedbacksSchema.aggregate([
       { $match: filter },
       {
