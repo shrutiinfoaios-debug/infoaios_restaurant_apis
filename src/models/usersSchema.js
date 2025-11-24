@@ -39,7 +39,11 @@ const UsersSchema = new Schema({
     noOfTables: {
         type: Number,
         default: null
-    },        
+    },  
+    tableTypes:{
+        type: Array,
+        default:null
+    },    
     ipAddress: {
         type: String,
         trim: true 
