@@ -6,6 +6,7 @@
  */
 
 const menuCategoriesSchema = require("../models/menuCategoriesSchema");
+const menuItemsSchema = require("../models/menuItemsSchema");
 const menuItemSchema = require("../models/menuItemsSchema");
 const mongoose = require("mongoose");
 
@@ -38,6 +39,55 @@ module.exports = {
     if (!restaurantId) return null;
     return menuCategoriesSchema.find({ userRestaurantId: restaurantId });
   },
+
+  /**
+     * @function viewMenucategory
+     * @description renders menucategory details
+     * @param {string} id - menucategory ID to view
+     * @returns {Promise<Object|null>} rendered menucategory document
+     */
+    async viewMenucategory(id) {
+      return menuCategoriesSchema.findById(id);
+    },
+
+  
+  
+  /**
+     * @function updateMenucategory
+     * @description Updates menucategory with validation.
+     *
+     * @param {string} id - Menucategory ID to update
+     * @param {Object} updates - Updated fields
+     * @param {string} updatedBy - Authenticated user's ID
+     * @returns {Promise<Object|null>} Updated menucateory document
+     */
+    async updateMenucategory(id, updates, updatedBy) {
+      updates.updatedBy = new ObjectId(updatedBy);
+      return menuCategoriesSchema.findByIdAndUpdate(id, updates, {
+        new: true,
+        runValidators: true,
+      });
+    },
+
+
+    /**
+     * @function deleteMenucategory
+     * @description Deletes menucatgeory with validation.
+     *
+     * @param {string} id - Menucategory ID to delete
+     * @param {string} deletedBy - Authenticated user's ID
+     * @returns {Promise<Object|null>} Deleted menucategory message
+     */
+    async deleteMenucategory(id, deletedBy) {
+      updates = {}
+      updates.deletedBy = new ObjectId(deletedBy);
+      updates.isDeleted = true;
+      return menuCategoriesSchema.findByIdAndUpdate(id, updates, {
+        new: true,
+        runValidators: true,
+      });
+    },
+
 
   /**
    * @param {string} createdBy - Authenticated user ID
@@ -108,4 +158,52 @@ module.exports = {
       },
     ]);
   },
+
+    /**
+     * @function viewMenuitem
+     * @description renders menuitem details
+     * @param {string} id - menuitem ID to view
+     * @returns {Promise<Object|null>} rendered menuitem document
+     */
+    async viewMenuitem(id) {
+      return menuItemsSchema.findById(id);
+    },
+
+  
+  
+  /**
+     * @function updateMenuitem
+     * @description Updates menuitem with validation.
+     *
+     * @param {string} id - Menuitem ID to update
+     * @param {Object} updates - Updated fields
+     * @param {string} updatedBy - Authenticated user's ID
+     * @returns {Promise<Object|null>} Updated menuitem document
+     */
+    async updateMenuitem(id, updates, updatedBy) {
+      updates.updatedBy = new ObjectId(updatedBy);
+      return menuItemsSchema.findByIdAndUpdate(id, updates, {
+        new: true,
+        runValidators: true,
+      });
+    },
+
+
+    /**
+     * @function deleteMenuitem
+     * @description Deletes menuitem with validation.
+     *
+     * @param {string} id - Menuitem ID to delete
+     * @param {string} deletedBy - Authenticated user's ID
+     * @returns {Promise<Object|null>} Deleted menuitem message
+     */
+    async deleteMenuitem(id, deletedBy) {
+      updates = {}
+      updates.deletedBy = new ObjectId(deletedBy);
+      updates.isDeleted = true;
+      return menuItemsSchema.findByIdAndUpdate(id, updates, {
+        new: true,
+        runValidators: true,
+      });
+    },
 };

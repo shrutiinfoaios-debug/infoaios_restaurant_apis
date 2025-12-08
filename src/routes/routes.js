@@ -117,6 +117,26 @@ router.post(
   menuController.menucategory_list
 );
 
+/**
+ * @route POST /menucategory/menucategory/:id
+ * @description Retrieve menucategory details.
+ */
+router.post("/menucategory/view_menucategory/:id", UserDecodeJwt, menuController.view_menucategory);
+
+/**
+ * @route PUT /menucategory/update_menucategory/:id
+ * @description Update menucategory information of a specific menucategory.
+ * @param {string} id - menucategory ID
+ */
+router.put("/menucategory/update_menucategory/:id", UserDecodeJwt, menuController.update_menucategory);
+
+/**
+ * @route DELETE /menucategory/delete_menucategory/:id
+ * @description Delete a menucategory for a restaurant table.
+ */
+router.delete("/menucategory/delete_menucategory/:id", UserDecodeJwt, menuController.delete_menucategory);
+
+
 /* -------------------------------------------------------------------------- */
 /*                               MENU ITEMS                                    */
 /* -------------------------------------------------------------------------- */
@@ -132,6 +152,26 @@ router.post("/menuitem/create_menuitem", UserDecodeJwt, menuController.create_me
  * @description Retrieve list of menu items.
  */
 router.post("/menuitem/menuitem_list", UserDecodeJwt, menuController.menuitem_list);
+
+/**
+ * @route POST /menuitem/view_menuitem/:id
+ * @description Retrieve menuitem details.
+ */
+router.post("/menuitem/view_menuitem/:id", UserDecodeJwt, menuController.view_menuitem);
+
+/**
+ * @route PUT /menuitem/update_menuitem/:id
+ * @description Update menuitem information of a specific menuitem.
+ * @param {string} id - menuitem ID
+ */
+router.put("/menuitem/update_menuitem/:id", UserDecodeJwt, menuController.update_menuitem);
+
+/**
+ * @route DELETE /menuitem/delete_menuitem/:id
+ * @description Delete a menuitem for a restaurant table.
+ */
+router.delete("/menuitem/delete_menuitem/:id", UserDecodeJwt, menuController.delete_menuitem);
+
 
 /* -------------------------------------------------------------------------- */
 /*                                  ORDERS                                     */

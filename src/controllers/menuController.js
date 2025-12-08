@@ -61,6 +61,73 @@ exports.menucategory_list = async (req, res, next) => {
 };
 
 /**
+ * @function view_menucategory
+ * @description Express controller: renders menucategory detail.
+ *
+ * @route POST /menucategory/menucategory_view/:id
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ * @returns {Promise<void>}
+ */
+exports.view_menucategory = async (req, res) => {
+  try {
+    const viewMenucategory = await menuCategoriesService.viewMenucategory(
+      req.params.id
+    );
+
+    res.status(200).json(viewMenucategory);
+  } catch (e) {
+    res.status(constants.HTTP_400).json({ message: e.message });
+  }
+};  
+
+  /**
+   * @function update_menucategory
+   * @description Express controller: updates a menucategory detail.
+   *
+   * @route PUT /menucategory/update_menucategory/:id
+   * @param {import('express').Request} req
+   * @param {import('express').Response} res
+   * @returns {Promise<void>}
+   */
+  exports.update_menucategory = async (req, res) => {
+    try {
+      const updatedMenucategory = await menuCategoriesService.updateMenucategory(
+        req.params.id,
+        req.body,
+        req.user._id
+      );
+  
+      res.status(200).json(updatedMenucategory);
+    } catch (e) {
+      res.status(constants.HTTP_400).json({ message: e.message });
+    }
+  };
+
+  /**
+   * @function delete_menucategory
+   * @description Express controller: deletes a menucategory.
+   *
+   * @route DELETE /menucategory/delete_menucategory/:id
+   * @param {import('express').Request} req
+   * @param {import('express').Response} res
+   * @returns {Promise<void>}
+   */
+  exports.delete_menucategory = async (req, res) => {
+    try {
+      const deletedMenucategory = await menuCategoriesService.deleteMenucategory(
+        req.params.id,
+        req.user._id
+      );
+  
+      res.status(200).json(deletedMenucategory);
+    } catch (e) {
+      res.status(constants.HTTP_400).json({ message: e.message });
+    } 
+  };  
+  
+
+/**
  * @function create_menuitem
  * @description Express controller: creates a new menu item.
  *
@@ -112,3 +179,70 @@ exports.menuitem_list = async (req, res, next) => {
       .json({ message: constants.SOMETHING_WENT_WRONG });
   }
 };
+
+/**
+ * @function view_menuitem
+ * @description Express controller: renders menuitem detail.
+ *
+ * @route POST /menuitem/menuitem_view/:id
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ * @returns {Promise<void>}
+ */
+exports.view_menuitem = async (req, res) => {
+  try {
+    const viewMenuitem = await menuCategoriesService.viewMenuitem(
+      req.params.id
+    );
+
+    res.status(200).json(viewMenuitem);
+  } catch (e) {
+    res.status(constants.HTTP_400).json({ message: e.message });
+  }
+};  
+
+  /**
+   * @function update_menuitem
+   * @description Express controller: updates a menuitem detail.
+   *
+   * @route PUT /menuitem/update_menuitem/:id
+   * @param {import('express').Request} req
+   * @param {import('express').Response} res
+   * @returns {Promise<void>}
+   */
+  exports.update_menuitem = async (req, res) => {
+    try {
+      const updatedMenuitem = await menuCategoriesService.updateMenuitem(
+        req.params.id,
+        req.body,
+        req.user._id
+      );
+  
+      res.status(200).json(updatedMenuitem);
+    } catch (e) {
+      res.status(constants.HTTP_400).json({ message: e.message });
+    }
+  };
+
+  /**
+   * @function delete_menuitem
+   * @description Express controller: deletes a menuitem.
+   *
+   * @route DELETE /menuitem/delete_menuitem/:id
+   * @param {import('express').Request} req
+   * @param {import('express').Response} res
+   * @returns {Promise<void>}
+   */
+  exports.delete_menuitem = async (req, res) => {
+    try {
+      const deletedMenuitem = await menuCategoriesService.deleteMenuitem(
+        req.params.id,
+        req.user._id
+      );
+  
+      res.status(200).json(deletedMenuitem);
+    } catch (e) {
+      res.status(constants.HTTP_400).json({ message: e.message });
+    } 
+  };  
+  
