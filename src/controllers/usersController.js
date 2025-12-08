@@ -42,8 +42,7 @@ exports.profile = async (req, res) => {
 exports.usersList = async (req, res) => {
   try {
     const users = await usersService.getUsersList();
-   // res.send(users);
-    res.send("Hello ");
+    res.send(users);
   } catch (error) {
     res
       .status(constants.HTTP_500)
