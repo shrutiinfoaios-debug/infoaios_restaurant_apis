@@ -116,3 +116,48 @@ module.exports.changePassword = async function (req, res) {
     res.status(constants.HTTP_500).json({ message: constants.SOMETHING_WENT_WRONG });
   }
 };
+
+module.exports.forgotPasswordRequest =  async function(req, res) {
+  /**
+   * @function forgotPasswordRequest
+   * @description Allows the user to update their forgotten password.
+   *
+   * @param {express.Request} req
+   * @param {express.Response} res
+   */
+  const { resetPasswordUrl, email } = req.body;
+
+  try {
+    const forgotPasswordRequestSent = await authService.forgotPasswordRequest(resetPasswordUrl, email);
+    
+    if(!forgotPasswordRequestSent){
+      return res.status(401).json({ message: 'Authentication failed. Invalid Email.'});
+    }
+    res.status(200).json({ message: 'Password reset link sent'});
+  } catch (error) {
+    res.status(500).json({ message: 'Something went wrong' , error: error.message });
+  }
+}
+
+module.exports.forgotPasswordReset = async function(req, res){
+  /**
+   * @function forgotPasswordReset
+   * @description Allows the user to update their forgotten password.
+   *
+   * @param {express.Request} req
+   * @param {express.Response} res
+   */
+
+  const { token, new_password } = req.body;
+
+  try {
+    const forgotPasswordReset = await authService.forgotPasswordReset(token, new_password);
+    
+    if(!forgotPasswordReset){
+      return res.status(401).json({ message: 'Authentication failed. Invalid Token.'});
+    }
+    res.status(200).json({ message: 'Password updated Successfully'});
+  } catch (error) {
+    res.status(500).json({ message: 'Something went wrong' , error: error.message });
+  }
+}

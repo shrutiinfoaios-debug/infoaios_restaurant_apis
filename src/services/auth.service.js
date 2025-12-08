@@ -14,6 +14,7 @@ const jwt = require("jsonwebtoken");
 const usersSchema = require("../models/usersSchema");
 const userRolesSchema = require("../models/userRolesSchema");
 const { hashPassword } = require("../utils/utils");
+const nodemailer = require('nodemailer');
 
 module.exports = {
   /**
@@ -106,4 +107,75 @@ module.exports = {
     await usersSchema.updateOne({ _id: userId }, { passwordHash: hashed });
     return true;
   },
+
+  /**
+   * @function forgotPasswordRequest
+   * @description Generates token and sents an email for password reset link.
+   *
+   * @param {string} resetPasswordUrl - reset password frontend URL.
+   * @param {string} userEmail - user Email.
+   * @returns {Promise<boolean>} true if success, false if authentication fails.
+   */
+  async forgotPasswordRequest(resetPasswordUrl, userEmail){
+      
+      try {
+        const user = await usersSchema.findOne({ email: userEmail });
+        if (!user) return null;
+
+        const secret = process.env.JWT_SECRET_ACCESS_TOKEN;
+        const token = jwt.sign({ id: user._id, email: user.email }, secret, { expiresIn: '1h' });
+
+        const resetURL = `${resetPasswordUrl}?token=${token}`;
+        
+        const transporter = nodemailer.createTransport({
+          service: 'gmail',
+          auth: {
+            user: process.env.SENDER_EMAIL,
+            pass: process.env.APP_PASSWORD,
+           }
+        });
+
+        const mailOptions = {
+          to: userEmail,
+          from: process.env.EMAIL,
+          subject: 'Reset Password for InfoAIOS',
+          text: `Hi ${user.username},\n
+           You have requested the reset of the password for your account.\n\n
+          Please click on the following link, or paste this into your browser to complete the process: \n
+          ${resetURL}\n\n
+          If you did not request this, please ignore this email and your password will remain unchanged.\n`,
+        };
+        
+        await transporter.sendMail(mailOptions);
+        return true;
+      } catch (error) {
+        return error;
+      }
+  },
+
+  /**
+   * @function forgotPasswordReset
+   * @description Resets Forgotten password by new password
+   *
+   * @param {string} token - reset password token.
+   * @param {string} new_password - new password for reset.
+   * @returns {Promise<boolean>} true if success, false if authentication fails.
+   */
+  async forgotPasswordReset(token, new_password){
+    try{
+      const decodedDetails = jwt.verify(token, process.env.JWT_SECRET_ACCESS_TOKEN);
+      const user = await usersSchema.findById(decodedDetails.id);
+
+      if(!user) return null;
+
+      user.passwordHash = await hashPassword(new_password);
+
+      await user.save();
+
+      return true;
+
+    }catch(error){
+      return error;
+    }
+  }
 };

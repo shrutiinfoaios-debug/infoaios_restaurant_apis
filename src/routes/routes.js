@@ -64,6 +64,19 @@ router.post("/auth/sign_in", authController.sign_in);
  */
 router.put("/auth/update_user_profile/:id", UserDecodeJwt, usersHandlers.updateUserProfile);
 
+
+/**
+ * @route POST /auth/forgot_password_request
+ * @description forgot password request.
+ */
+router.post("/auth/forgot_password_request", authController.forgotPasswordRequest);
+
+/**
+ * @route POST /auth/forgot_password
+ * @description forgot password .
+ */
+router.post("/auth/forgot_password_reset", authController.forgotPasswordReset);
+
 /* -------------------------------------------------------------------------- */
 /*                                 CALL LOGS                                   */
 /* -------------------------------------------------------------------------- */
