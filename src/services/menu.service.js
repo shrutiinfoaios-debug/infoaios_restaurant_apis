@@ -7,9 +7,8 @@
 
 const menuCategoriesSchema = require("../models/menuCategoriesSchema");
 const menuItemsSchema = require("../models/menuItemsSchema");
-const menuItemSchema = require("../models/menuItemsSchema");
 const mongoose = require("mongoose");
-
+const ObjectId = mongoose.Types.ObjectId;
 module.exports = {
   /**
    * @function createCategory
@@ -111,7 +110,7 @@ module.exports = {
    * @returns {Promise<Array>} Aggregated result of categories + items
    */
   async listMenuItems(restaurantId, categoryId = null) {
-    const ObjectId = mongoose.Types.ObjectId;
+    
 
     let menuItemListMatch = {};
     let menuCategoryListMatch = {
@@ -166,7 +165,8 @@ module.exports = {
      * @returns {Promise<Object|null>} rendered menuitem document
      */
     async viewMenuitem(id) {
-      return menuItemsSchema.findById(id);
+      menuid = new ObjectId(id);
+      return menuItemsSchema.findById(menuid);
     },
 
   

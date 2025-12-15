@@ -191,11 +191,19 @@ exports.menuitem_list = async (req, res, next) => {
  */
 exports.view_menuitem = async (req, res) => {
   try {
-    const viewMenuitem = await menuCategoriesService.viewMenuitem(
-      req.params.id
-    );
 
-    res.status(200).json(viewMenuitem);
+    const menuId = req.params.id;
+
+    if (!menuId) {
+      return res.status(401).json({ message: "parameter missing" });
+    }
+    const viewMenuitem = await menuCategoriesService.viewMenuitem(
+      menuId
+    );
+    if(!viewMenuitem || viewMenuitem == null)
+      res.status(constants.HTTP_400).json({ message: "No records found "});
+    else
+      res.status(200).json(viewMenuitem);
   } catch (e) {
     res.status(constants.HTTP_400).json({ message: e.message });
   }

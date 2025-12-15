@@ -11,6 +11,10 @@ const menuCategoriesSchema = new Schema({
         type: String,
         required: true
       },
+      isDeleted: {
+        type: Boolean,
+        default: false
+      },
       status: {
         type: String,
         required: true
@@ -23,7 +27,17 @@ const menuCategoriesSchema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'users', 
         default: null
-          }
+          },
+      updatedBy:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"users",
+        default: null
+      },
+      deletedBy:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"users",
+        default: null
+      }    
 },{ versionKey: false});
 
 module.exports = mongoose.model('menucategories', menuCategoriesSchema);
