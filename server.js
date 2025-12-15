@@ -7,7 +7,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("./swagger.json");
-const constants = import('./src/utils/constants.js');
+const constants = require('./src/utils/constants.js');
 const requestLogger = require("./src/middlewares/requestLogger");
 
 const app = express();
