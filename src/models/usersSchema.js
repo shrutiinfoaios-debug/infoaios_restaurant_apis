@@ -25,8 +25,7 @@ const UsersSchema = new Schema({
             },
     userrole: {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: 'userroles',
-                required: true
+                ref: 'userroles'
     },        
     restaurantName: {
                 type: String,
